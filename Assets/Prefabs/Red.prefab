@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2677166889155285573}
   - component: {fileID: 2677166889155285574}
   - component: {fileID: 2677166889155285575}
-  - component: {fileID: 7830419535583829388}
+  - component: {fileID: 1118203100704978899}
   m_Layer: 7
   m_Name: Red
   m_TagString: red
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7830419535583829388
+--- !u!114 &1118203100704978899
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,9 +107,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 378767812739168344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0db3c93627a9f9243acb040bc8a5cc53, type: 3}
+  m_Script: {fileID: 11500000, guid: 5774fb08a7f1e6e4785cf572df79c0a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeSpeed: 3
-  waitOut: 1
-  waitIn: 1
+  fadeSpeed: 1
+  fadeDuration: 2
+  fadeAllowed: 0

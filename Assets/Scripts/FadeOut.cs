@@ -7,6 +7,12 @@ public class FadeOut : MonoBehaviour
     public float fadeSpeed = 3.0f;
 
     public bool waitOut, waitIn = true;
+
+    private IEnumerator fadeOut;
+    public void Awake()
+    {
+        fadeOut = FadeOutObject();
+    }
     public void StartFadeOut()
     {
         StartCoroutine(FadeOutObject());
@@ -41,6 +47,7 @@ public class FadeOut : MonoBehaviour
     }
     public IEnumerator FadeInObject()
     {
+
         if (waitOut == true && waitIn == true)
         {
             while (this.GetComponent<Renderer>().material.color.a < 1)
