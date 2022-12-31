@@ -30,7 +30,9 @@ public class PlayerControl : MonoBehaviour
 
     private Vector3 moveInput;
 
-    //private bool isGrounded;
+    public bool isGrounded;
+    //public float maxDistance = 1.0f;
+    //public Vector3 boxSize;
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -64,10 +66,28 @@ public class PlayerControl : MonoBehaviour
     }
     */
 
-    bool IsGrounded()
+    /*private void OnDrawGizmos()
     {
-        return Physics.CheckSphere(feet.position, 0.25f, ~notGround);
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(transform.position - transform.up * maxDistance, boxSize);
+    }*/
+
+    private void OnCollisionStay(Collision collision)
+    {
+        foreach (ContactPoint c in collision.contacts)
+        {
+            if (c.normal == Vector3.up)
+            {
+                isGrounded = true;
+                // break;
+            }
+        }
     }
+
+    /*bool IsGrounded()
+    {
+        return Physics.BoxCast(transform.position, boxSize, -transform.up, transform.rotation, maxDistance, ~notGround);
+    }*/
     private void MovePlayer()
     {
         //get input
@@ -97,10 +117,11 @@ public class PlayerControl : MonoBehaviour
         }
 
         //jumping
-        if (Input.GetKey(KeyCode.Space) && IsGrounded() == true && Time.time > jumpAllowed)
+        if (Input.GetKey(KeyCode.Space) && isGrounded == true && Time.time > jumpAllowed)
         {
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
-            jumpAllowed = Time.time + jumpCooldown;
+            isGrounded = false;
+            //jumpAllowed = Time.time + jumpCooldown;
         }
 
         //crouching
