@@ -31,8 +31,8 @@ public class PlayerControl : MonoBehaviour
     private Vector3 moveInput;
 
     public bool isGrounded;
-    //public float maxDistance = 1.0f;
-    //public Vector3 boxSize;
+    public float maxDistance = 1.0f;
+    public Vector3 boxSize;
     void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -72,7 +72,7 @@ public class PlayerControl : MonoBehaviour
         Gizmos.DrawCube(transform.position - transform.up * maxDistance, boxSize);
     }*/
 
-    private void OnCollisionStay(Collision collision)
+    /*private void OnCollisionStay(Collision collision)
     {
         foreach (ContactPoint c in collision.contacts)
         {
@@ -82,12 +82,12 @@ public class PlayerControl : MonoBehaviour
                 // break;
             }
         }
-    }
+    }*/
 
-    /*bool IsGrounded()
+    bool IsGrounded()
     {
         return Physics.BoxCast(transform.position, boxSize, -transform.up, transform.rotation, maxDistance, ~notGround);
-    }*/
+    }
     private void MovePlayer()
     {
         //get input
@@ -117,7 +117,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         //jumping
-        if (Input.GetKey(KeyCode.Space) && isGrounded == true && Time.time > jumpAllowed)
+        if (Input.GetKey(KeyCode.Space) && IsGrounded() == true && Time.time > jumpAllowed)
         {
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             isGrounded = false;
@@ -144,6 +144,6 @@ public class PlayerControl : MonoBehaviour
         rotX = Mathf.Clamp(rotX, -90f, 90f);
 
         cam.transform.eulerAngles = new Vector3(-rotX, cam.transform.eulerAngles.y + rotY, 0);
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + rotY, 0);
+        transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y + rotY, 0);
     }
 }
