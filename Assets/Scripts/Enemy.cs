@@ -20,9 +20,14 @@ public class Enemy : MonoBehaviour
     public GameObject healthBarUI;
     public Slider hpSlider;
 
+    public float dmgCooldown = 2f;
+    private float dmgAllow = 0f;
+
     private NavMeshAgent enemyAI;
     private Rigidbody enemyRB;
+    private GameObject playerObject;
     private PlayerControl playerScript;
+    private PlayerStats playerStats;
     private Quaternion defaultRotation;
 
     private bool playerNearby;
@@ -34,7 +39,9 @@ public class Enemy : MonoBehaviour
         enemy = transform.parent;
         enemyAI = enemy.transform.GetComponent<NavMeshAgent>();
         enemyRB = enemy.transform.GetComponent<Rigidbody>();
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerControl>();
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        playerScript = playerObject.GetComponentInChildren<PlayerControl>();
+        playerStats = playerObject.GetComponentInChildren<PlayerStats>();
 
         //random colors
         var enemyColor = enemy.GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
@@ -55,6 +62,17 @@ public class Enemy : MonoBehaviour
 
     }
     private void Update()
+    {
+        RotateEnemy();
+        DealDamage();
+
+        hpSlider.value = CalculateHealth();
+        if (currHealth < maxHealth)
+        {
+            healthBarUI.SetActive(true);
+        }
+    }
+    void RotateEnemy()
     {
         //if player is near, face towards and set player location as destination to move towards
         //else reset to original rotation and set destination to current location aka stop moving
@@ -80,14 +98,7 @@ public class Enemy : MonoBehaviour
                 resetOnce = true;
             }
         }
-
-        hpSlider.value = CalculateHealth();
-        if (currHealth < maxHealth)
-        {
-            healthBarUI.SetActive(true);
-        }
     }
-
     float CalculateHealth()
     {
         float currHp = currHealth;
@@ -115,10 +126,10 @@ public class Enemy : MonoBehaviour
         {
             currHealth -= damageTaken;
             Debug.Log("Enemy knocked out!");
-            enemy.gameObject.GetComponent<NavMeshAgent>().enabled = false;
-            enemy.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            enemy.gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.back * knockback, ForceMode.Impulse);
-            enemy.gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.up * knockup, ForceMode.Impulse);
+            enemyAI.enabled = false;
+            enemyRB.isKinematic = false;
+            enemyRB.AddRelativeForce(Vector3.back * knockback, ForceMode.Impulse);
+            enemyRB.AddRelativeForce(Vector3.up * knockup, ForceMode.Impulse);
 
             kbAllow = Time.time + kbCooldown;
         }
@@ -153,6 +164,19 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             playerNearby = false;
+        }
+    }
+
+    private void DealDamage()
+    {
+        float distance = Vector3.Distance(playerScript.transform.position, enemy.transform.position);
+        print("Distance between " + gameObject.transform.parent.name + " and the Player is: " + distance);
+
+        if (distance < 5 && Time.time > dmgAllow)
+        {
+            print("Within range! Dealing damage.");
+            playerStats.TakeDamage(enemy.gameObject, damageDealt);
+            dmgAllow = Time.time + dmgCooldown;
         }
     }
 }
