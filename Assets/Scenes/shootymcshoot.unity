@@ -393,7 +393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5937533132897881098, guid: 2343d861cd3a517408e2beb3766b8da7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2343d861cd3a517408e2beb3766b8da7, type: 3}
@@ -1217,7 +1217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5937533132897881098, guid: 2343d861cd3a517408e2beb3766b8da7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6621095050275054770, guid: 2343d861cd3a517408e2beb3766b8da7, type: 3}
       propertyPath: m_Camera
@@ -1684,6 +1684,7 @@ MonoBehaviour:
   maxHealth: 100
   currHealth: 0
   knockback: 15
+  knockup: 5
 --- !u!1 &1833816552
 GameObject:
   m_ObjectHideFlags: 0

@@ -1430,6 +1430,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6562382653205111666, guid: eaeefdb2850cbab499483731ac4bd319, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6746676578290457194, guid: eaeefdb2850cbab499483731ac4bd319, type: 3}
       propertyPath: rangeMax
       value: 10
