@@ -273,6 +273,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdArea: {fileID: 1693439757}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 72
   pickupRange: 3.5
   pickupForce: 150
   throwForce: 10

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PickupObject : MonoBehaviour
 {
-    public Transform holdArea;
-    public float pickupRange = 3.5f;
-    public float pickupForce = 150.0f;
-    public float throwForce = 10.0f;
+    [SerializeField] private Transform holdArea;
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float pickupRange = 3.5f;
+    [SerializeField] private float pickupForce = 150.0f;
+    [SerializeField] private float throwForce = 10.0f;
 
     private GameObject heldObj;
     private Rigidbody heldRB;
@@ -18,10 +19,11 @@ public class PickupObject : MonoBehaviour
             if (heldObj == null)
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange))
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange, ~layerMask))
                 {
                     //pickup
                     Grab(hit.transform.gameObject);
+                    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * pickupRange, Color.blue, 0.1f);
                 }
             }
             else
