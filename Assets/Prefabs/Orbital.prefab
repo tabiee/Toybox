@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2445217973445498925}
   - component: {fileID: 6605626525041094858}
-  - component: {fileID: 6000809147959104296}
   - component: {fileID: 6420373461619669740}
   - component: {fileID: 8936512163169602177}
+  - component: {fileID: -7939865790829372433}
   m_Layer: 0
   m_Name: Orbital
   m_TagString: Orbitals
@@ -87,22 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6000809147959104296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3975060818900504292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6688db3b1aa82914bb1a2b4359e75bec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gravitatedTo: {fileID: 0}
-  rb: {fileID: 0}
-  maxGravity: -500
-  maxGravityDist: 55
 --- !u!50 &6420373461619669740
 Rigidbody2D:
   serializedVersion: 4
@@ -117,8 +101,8 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -140,3 +124,19 @@ CircleCollider2D:
   m_Offset: {x: -0.0000076293945, y: 0}
   serializedVersion: 2
   m_Radius: 3
+--- !u!114 &-7939865790829372433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3975060818900504292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b246cecad01160343b397722b2136605, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAttractor: 0
+  isAttractee: 1
+  initialVelocity: {x: 0, y: 0, z: 0}
+  applyInitialVelocityOnStart: 0
