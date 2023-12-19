@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Orbit : MonoBehaviour
 {
+
+    //og stuff
     //[SerializeField] private Transform gravitatedTo;
     //[SerializeField] private Rigidbody2D rb;
 
@@ -19,6 +21,8 @@ public class Orbit : MonoBehaviour
     public static List<Rigidbody2D> attractors = new List<Rigidbody2D>();
     public static List<Rigidbody2D> attractees = new List<Rigidbody2D>();
 
+
+    //og stuff
     //private void Start()
     //{
     //    rb = GetComponent<Rigidbody2D>();
@@ -31,6 +35,7 @@ public class Orbit : MonoBehaviour
         DoGravity();
     }
 
+    //og stuff
     //void DoGravity()
     //{
     //    float dist = Vector2.Distance(gravitatedTo.transform.position, transform.position);
@@ -58,14 +63,21 @@ public class Orbit : MonoBehaviour
 
     public static void AddGravityForce(Rigidbody2D attractor, Rigidbody2D target)
     {
+        //this uses newtons gravity F = G * (m1 * m2) / r^2
+        //i dont fully understand the formula but the code makes sense, even if i wouldnt be able to come up with it on my own
+
+        //m1 * m2 * G
         float massProduct = attractor.mass * target.mass * G;
 
+        //get direction between objects n stuff
         Vector3 difference = attractor.position - target.position;
         float distance = difference.magnitude;
 
+        //this is all of above divided by r^2, or i guess r * r but same shit
         float unScaledforceMagnitude = massProduct / distance * distance;
         float forceMagnitude = G * unScaledforceMagnitude;
 
+        //actual direction & vector magic
         Vector3 forceDirection = difference.normalized;
         Vector3 forceVector = forceDirection * forceMagnitude;
         target.AddForce(forceVector);

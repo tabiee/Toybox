@@ -8,6 +8,9 @@ public class GatherControls : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject cam;
+    [SerializeField] private CreatureUI ui;
+    [SerializeField] private SceneStateManager sceneState;
+
     [SerializeField] private float pullForce;
     [SerializeField] private float dispenseForce;
     [SerializeField] private float distanceFactor;
@@ -53,26 +56,64 @@ public class GatherControls : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            Raycast();
+            Siphon();
         }
         else if (Input.GetMouseButton(0))
         {
-            if (LevelData.greenCreature > 0 && Time.time > dispenseAllow)
+            string creatureString = ui.stringForCreature;
+            int creatureValue = LevelData.GetCreatureValue(creatureString);
+
+            if (creatureValue > 0 && Time.time > dispenseAllow)
             {
                 dispenseAllow = Time.time + dispenseCD;
 
-                LevelData.greenCreature--;
+                creatureValue--;
+                LevelData.SetCreatureValue(creatureString, creatureValue);
 
-                CreaturePrefabs myScriptableObject = Resources.Load<CreaturePrefabs>("Green");
+                CreaturePrefabs myScriptableObject = Resources.Load<CreaturePrefabs>(creatureString);
                 Vector3 spawnPoint = player.transform.position + player.transform.forward * 2 + Vector3.up;
 
                 GameObject spawnedCreature = Instantiate(myScriptableObject.prefab, spawnPoint, Quaternion.identity);
-                Rigidbody creatureRB = spawnedCreature.GetComponent<Rigidbody>();
-                creatureRB.velocity = player.transform.forward * dispenseForce;
+
+                foreach (Transform childTransform in spawnedCreature.transform)
+                {
+
+                    Rigidbody creatureRB = childTransform.GetComponent<Rigidbody>();
+
+                    if (creatureRB != null)
+                    {
+                        creatureRB.velocity = player.transform.forward * dispenseForce;
+                        break;
+                    }
+                }
             }
+
+            //if (LevelData.greenCreature > 0 && Time.time > dispenseAllow)
+            //{
+            //    dispenseAllow = Time.time + dispenseCD;
+
+            //    LevelData.greenCreature--;
+
+            //    CreaturePrefabs myScriptableObject = Resources.Load<CreaturePrefabs>("Green");
+            //    Vector3 spawnPoint = player.transform.position + player.transform.forward * 2 + Vector3.up;
+
+            //    GameObject spawnedCreature = Instantiate(myScriptableObject.prefab, spawnPoint, Quaternion.identity);
+
+            //    foreach (Transform childTransform in spawnedCreature.transform)
+            //    {
+
+            //        Rigidbody creatureRB = childTransform.GetComponent<Rigidbody>();
+
+            //        if (creatureRB != null)
+            //        {
+            //            creatureRB.velocity = player.transform.forward * dispenseForce;
+            //            break;
+            //        }
+            //    }
+            //}
         }
     }
-    private void Raycast()
+    private void Siphon()
     {
         //y ray = new Ray(cam.transform.position, cam.transform.forward);
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -98,12 +139,19 @@ public class GatherControls : MonoBehaviour
         {
             Debug.Log($"current data is {LevelData.levelToLoad} and {LevelData.zoneToLoad}");
             Debug.Log($"greens are {LevelData.greenCreature}");
+            Debug.Log($"yellows are {LevelData.yellowCreature}");
+            Debug.Log($"reds are {LevelData.redCreature}");
         }
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
+            sceneState.SaveSceneState(SceneManager.GetActiveScene().name);
+            Invoke("QuitToUI", 5f);
+        }
+    }
+    void QuitToUI()
+    {
             SceneManager.LoadScene("BattleUI");
             Cursor.lockState = CursorLockMode.None;
-        }
     }
 }

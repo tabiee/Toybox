@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Reflection;
 
 public class Collectable : MonoBehaviour
 {
@@ -21,6 +22,16 @@ public class Collectable : MonoBehaviour
     private float resetCD = 0.5f;
     private float resetAllow = 0f;
     private bool resetOnce = false;
+
+    //yoinked from ChatGPT
+    //public static Dictionary<string, System.Action> tagToField = new Dictionary<string, System.Action>
+    //{
+    //    { "greenCreature", () => LevelData.greenCreature++ },
+    //    { "yellowCreature", () => LevelData.yellowCreature++ },
+    //    { "redCreature", () => LevelData.redCreature++ }
+    //};
+
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -111,10 +122,19 @@ public class Collectable : MonoBehaviour
         if (collision.gameObject.tag == "Player" && isPickedUp && !once)
         {
             once = true;
-            LevelData.greenCreature++;
+            AddCreatureByTag();
+
             GameObject explosion = Instantiate(particle, this.transform.position, Quaternion.identity);
             Destroy(explosion, 2f);
             Destroy(gameObject);
         }
+    }
+    void AddCreatureByTag()
+    {
+        string objectTag = gameObject.tag;
+        int creatureValue = LevelData.GetCreatureValue(objectTag);
+
+        creatureValue++;
+        LevelData.SetCreatureValue(objectTag, creatureValue);
     }
 }

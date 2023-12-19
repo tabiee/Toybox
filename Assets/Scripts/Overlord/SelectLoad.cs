@@ -7,6 +7,7 @@ using TMPro;
 
 public class SelectLoad : MonoBehaviour
 {
+    [SerializeField] private SceneStateManager sceneState;
     public string levelName;
     public string zoneName;
     [SerializeField] private TMP_Text selectedText;
