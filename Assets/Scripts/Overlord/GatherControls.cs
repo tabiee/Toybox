@@ -87,30 +87,6 @@ public class GatherControls : MonoBehaviour
                     }
                 }
             }
-
-            //if (LevelData.greenCreature > 0 && Time.time > dispenseAllow)
-            //{
-            //    dispenseAllow = Time.time + dispenseCD;
-
-            //    LevelData.greenCreature--;
-
-            //    CreaturePrefabs myScriptableObject = Resources.Load<CreaturePrefabs>("Green");
-            //    Vector3 spawnPoint = player.transform.position + player.transform.forward * 2 + Vector3.up;
-
-            //    GameObject spawnedCreature = Instantiate(myScriptableObject.prefab, spawnPoint, Quaternion.identity);
-
-            //    foreach (Transform childTransform in spawnedCreature.transform)
-            //    {
-
-            //        Rigidbody creatureRB = childTransform.GetComponent<Rigidbody>();
-
-            //        if (creatureRB != null)
-            //        {
-            //            creatureRB.velocity = player.transform.forward * dispenseForce;
-            //            break;
-            //        }
-            //    }
-            //}
         }
     }
     private void Siphon()
@@ -146,7 +122,7 @@ public class GatherControls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1))
         {
             sceneState.SaveSceneState(SceneManager.GetActiveScene().name);
-            Invoke("QuitToUI", 5f);
+            Invoke("QuitToUI", 0.1f);
         }
     }
     void QuitToUI()

@@ -23,15 +23,6 @@ public class Collectable : MonoBehaviour
     private float resetAllow = 0f;
     private bool resetOnce = false;
 
-    //yoinked from ChatGPT
-    //public static Dictionary<string, System.Action> tagToField = new Dictionary<string, System.Action>
-    //{
-    //    { "greenCreature", () => LevelData.greenCreature++ },
-    //    { "yellowCreature", () => LevelData.yellowCreature++ },
-    //    { "redCreature", () => LevelData.redCreature++ }
-    //};
-
-
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
