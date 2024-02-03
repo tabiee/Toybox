@@ -44,9 +44,6 @@ public class Collectable : MonoBehaviour
                 }
             }
 
-            //agent.isStopped = true;
-            //agent.updatePosition = false;
-            //agent.updateRotation = false;
             agent.velocity = Vector3.zero;
             agent.enabled = false;
         }
@@ -54,9 +51,6 @@ public class Collectable : MonoBehaviour
         else
         {
             agent.enabled = true;
-            //agent.isStopped = false;
-            //agent.updatePosition = true;
-            //agent.updateRotation = true;
             Invoke("StartWander", Random.Range(0f, wanderInterval));
         }
     }

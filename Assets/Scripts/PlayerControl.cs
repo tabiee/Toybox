@@ -8,7 +8,7 @@ public class PlayerControl : MonoBehaviour
     public Transform cam;
     public Rigidbody rb;
     public GameObject body;
-    public LayerMask notGround;
+    //public LayerMask notGround;
 
     [Header("Movement Settings")]
     public float moveSpeed = 4.0f;

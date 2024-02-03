@@ -4,85 +4,107 @@ using UnityEngine;
 
 public class PickupObject : MonoBehaviour
 {
-    [SerializeField] private Transform holdArea;
-    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private Vector3 heldLocation = new Vector3(0f, 0f, 2.5f);
+    [SerializeField] private LayerMask layerToIgnore;
     [SerializeField] private float pickupRange = 3.5f;
     [SerializeField] private float pickupForce = 150.0f;
     [SerializeField] private float throwForce = 10.0f;
 
-    private GameObject heldObj;
-    private Rigidbody heldRB;
+    private Transform heldAtEmpty;
+    private GameObject heldObject;
+    private Rigidbody heldRigidbody;
+
+    private void Start()
+    {
+        //makes an empty object parented to this object to set that as the location where the picked up object sits at
+        GameObject emptyObject = new GameObject("Hands");
+        emptyObject.transform.parent = transform;
+        emptyObject.transform.localPosition = heldLocation;
+        heldAtEmpty = emptyObject.transform;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (heldObj == null)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange, ~layerMask))
-                {
-                    //pickup
-                    Grab(hit.transform.gameObject);
-                    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * pickupRange, Color.blue, 0.1f);
-                }
-            }
-            else
-            {
-                //drop
-                Drop();
-            }
+            //E to pickup or drop
+            ProcessObject();
         }
-        if (Input.GetMouseButtonDown(0) && heldObj != null)
-        {
-            //throw
-            Throw();
-        }
-        if (heldObj != null)
-        {
-            //move
-            Move();
-        }
-    }
-    void Move()
-    {
-        if (Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f)
-        {
-            Vector3 moveDirection = holdArea.position - heldObj.transform.position;
-            heldRB.AddForce(moveDirection * pickupForce);
-        }
-    }
-    void Grab(GameObject pickObj)
-    {
-        if (pickObj.gameObject.TryGetComponent(out Rigidbody rbody))
-        {
-            heldRB = rbody;
-            heldRB.useGravity = false;
-            heldRB.drag = 20;
-            heldRB.constraints = RigidbodyConstraints.FreezeRotation;
 
-            heldRB.transform.parent = holdArea;
-            heldObj = pickObj;
+        if (Input.GetMouseButtonDown(0) && heldObject != null)
+        {
+            //left click to throw
+            ThrowHeldObject();
+        }
+
+        if (heldObject != null)
+        {
+            //keep object infront of you
+            PullHeldObject();
         }
     }
-    void Drop()
+    void ProcessObject()
     {
-        heldRB.useGravity = true;
-        heldRB.drag = 1;
-        heldRB.constraints = RigidbodyConstraints.None;
-
-        heldRB.transform.parent = null;
-        heldObj = null;
+        if (heldObject == null)
+        {
+            //raycast and pickup hit object
+            CheckForObject();
+        }
+        else
+        {
+            //drop whatever you're holding
+            DropHeldObject();
+        }
     }
-    void Throw()
+    void CheckForObject()
     {
-        heldRB.useGravity = true;
-        heldRB.drag = 1;
-        heldRB.constraints = RigidbodyConstraints.None;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange, ~layerToIgnore))
+        {
+            //pickup whats infront of you
+            GrabObject(hit.transform.gameObject);
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * pickupRange, Color.blue, 0.1f);
+        }
+    }
+    void PullHeldObject()
+    {
+        if (Vector3.Distance(heldObject.transform.position, heldAtEmpty.position) > 0.1f)
+        {
+            Vector3 pullDirection = heldAtEmpty.position - heldObject.transform.position;
+            heldRigidbody.AddForce(pullDirection * pickupForce);
+        }
+    }
+    void GrabObject(GameObject pickedUpObject)
+    {
+        if (pickedUpObject.gameObject.TryGetComponent(out Rigidbody rb))
+        {
+            heldRigidbody = rb;
+            heldRigidbody.useGravity = false;
+            heldRigidbody.drag = 20;
+            heldRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+            heldRigidbody.transform.parent = heldAtEmpty;
+            heldObject = pickedUpObject;
+        }
+    }
+    void DropHeldObject()
+    {
+        heldRigidbody.useGravity = true;
+        heldRigidbody.drag = 1;
+        heldRigidbody.constraints = RigidbodyConstraints.None;
+
+        heldRigidbody.transform.parent = null;
+        heldObject = null;
+    }
+    void ThrowHeldObject()
+    {
+        heldRigidbody.useGravity = true;
+        heldRigidbody.drag = 1;
+        heldRigidbody.constraints = RigidbodyConstraints.None;
 
         // throw
-        heldRB.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+        heldRigidbody.AddForce(transform.forward * throwForce, ForceMode.Impulse);
 
-        heldRB.transform.parent = null;
-        heldObj = null;
+        heldRigidbody.transform.parent = null;
+        heldObject = null;
     }
 }
