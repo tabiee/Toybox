@@ -43,8 +43,8 @@ GameObject:
   - component: {fileID: 2026006249518118742}
   - component: {fileID: 2026006249518118741}
   - component: {fileID: 2026006249518118740}
-  - component: {fileID: 2026006249518118746}
   - component: {fileID: 2026006249518118745}
+  - component: {fileID: 6632309500680548493}
   m_Layer: 6
   m_Name: Body
   m_TagString: Player
@@ -132,32 +132,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2026006249518118746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026006249518118739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e3d578500893cf4191b1727f55adcb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 2026006249679790919}
-  rb: {fileID: 2026006249518118745}
-  body: {fileID: 2026006249518118739}
-  notGround:
-    serializedVersion: 2
-    m_Bits: 72
-  moveSpeed: 4
-  turnSpeed: 4
-  sprintSpeed: 8
-  sprintCooldown: 5
-  jumpHeight: 7
-  crouchModifier: 2
-  isGrounded: 1
-  hasJumped: 0
 --- !u!54 &2026006249518118745
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,6 +148,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!114 &6632309500680548493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026006249518118739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14e995d351d5e74994fdf1206fecc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 2026006249679790919}
+  rigidBody: {fileID: 2026006249518118745}
+  playerObject: {fileID: 2026006249518118739}
+  moveSpeed: 4
+  rotationSpeed: 4
+  sprintSpeed: 8
+  sprintCooldown: 5
+  crouchSpeed: 2
+  jumpHeight: 10
+  isGrounded: 1
+  hasJumped: 0
 --- !u!1 &2026006249679790915
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,10 +269,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf33cb1a666a304294b344938513f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdArea: {fileID: 1693439757}
-  layerMask:
+  heldLocation: {x: 0, y: 0, z: 2.5}
+  layerToIgnore:
     serializedVersion: 2
-    m_Bits: 72
+    m_Bits: 0
   pickupRange: 3.5
   pickupForce: 150
   throwForce: 10

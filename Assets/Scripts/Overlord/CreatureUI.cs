@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+using StarterAssets;
 
 public class CreatureUI : MonoBehaviour
 {
@@ -19,7 +21,6 @@ public class CreatureUI : MonoBehaviour
 
     private int square = 0;
     private Image[] selectionSquares;
-
     private void Start()
     {
         selectionSquares = new Image[] { greenCritter, yellowCritter, redCritter };

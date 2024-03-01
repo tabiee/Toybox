@@ -7,7 +7,6 @@ using TMPro;
 
 public class SelectLoad : MonoBehaviour
 {
-    [SerializeField] private SceneStateManager sceneState;
     public string levelName;
     public string zoneName;
     [SerializeField] private TMP_Text selectedText;
@@ -28,10 +27,11 @@ public class SelectLoad : MonoBehaviour
     }
     public void LoadZone()
     {
-        if (LevelData.zoneToLoad != "")
+        if (LevelData.zoneToLoad == "")
         {
-            SceneManager.LoadScene(LevelData.zoneToLoad);
+            return;
         }
+        SceneManager.LoadScene(LevelData.zoneToLoad);
     }
     public void SwapMenu()
     {
