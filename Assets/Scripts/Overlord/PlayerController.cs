@@ -123,12 +123,8 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded)
         {
-            ResetJump();
+            hasJumped = false; 
         }
-    }
-    private void ResetJump()
-    {
-        hasJumped = false;
     }
     private void Crouching()
     {
@@ -146,17 +142,17 @@ public class PlayerController : MonoBehaviour
     }
     private void CameraRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
-        float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
+        if (starterInputs.look.sqrMagnitude >= 0.01f)
+        {
+            rotY += starterInputs.look.y * rotationSpeed * Time.deltaTime;
+            rotX = starterInputs.look.x * rotationSpeed * Time.deltaTime;
 
-        rotY += mouseX;
-        rotX -= mouseY;
-        rotX = Mathf.Clamp(rotX, -90f, 90f);
+            rotY = Mathf.Clamp(rotY, -90f, 90f);
 
-        mainCamera.transform.localRotation = Quaternion.Euler(rotX, rotY, 0f);
-
-        //move cam on top of player and match player body rotation to camera
-        transform.eulerAngles = new Vector3(0, mainCamera.transform.eulerAngles.y, 0);
+            mainCamera.transform.localRotation = Quaternion.Euler(rotY, 0.0f, 0.0f);
+            transform.Rotate(Vector3.up * rotX);
+        }
+        //move cam on top of player
         mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
     }
 }

@@ -25,9 +25,9 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "8c4abdf8-4099-493a-aa1a-129acec7c3df",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -43,9 +43,9 @@
                 },
                 {
                     "name": "Crouch",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "37991b75-fe95-475e-88e8-4f5e5c5f3141",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

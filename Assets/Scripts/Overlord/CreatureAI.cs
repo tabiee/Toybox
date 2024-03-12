@@ -4,29 +4,29 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Reflection;
 
-public class Collectable : MonoBehaviour
+public class CreatureAI : MonoBehaviour
 {
     [SerializeField] private float wanderInterval = 3f;
     [SerializeField] private float wanderDistance = 5f;
-    [SerializeField] private GameObject particle;
+    [SerializeField] private GameObject particlePrefab;
 
     private NavMeshAgent agent;
-    private Rigidbody creatureRB;
+    private Rigidbody creatureRigidbody;
     private Vector3 destination;
     private bool isWandering = false;
-    private bool once = false;
+    private bool hasRunOnce = false;
 
     public float onMeshThreshold = 3f;
     public bool isPickedUp = true;
 
-    private float resetCD = 0.5f;
-    private float resetAllow = 0f;
+    private float resetCooldown = 0.5f;
+    private float cooldownWaitTime = 0f;
     private bool resetOnce = false;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        creatureRB = GetComponent<Rigidbody>();
+        creatureRigidbody = GetComponent<Rigidbody>();
     }
     private void Update()
     {
@@ -34,12 +34,12 @@ public class Collectable : MonoBehaviour
     //also check if yer on the navmesh
         if (isPickedUp)
         {
-            if (IsAgentOnNavMesh() && Time.time > resetAllow && creatureRB.velocity.y <= 0)
+            if (IsAgentOnNavMesh() && CooldownOver() && creatureRigidbody.velocity.y <= 0)
             {
-                resetAllow = resetCD + Time.time;
+                cooldownWaitTime = resetCooldown + Time.time;
                 if (resetOnce == false)
                 {
-                    Invoke("ResetAI", resetCD);
+                    Invoke("ResetAI", resetCooldown);
                     resetOnce = true;
                 }
             }
@@ -53,6 +53,10 @@ public class Collectable : MonoBehaviour
             agent.enabled = true;
             Invoke("StartWander", Random.Range(0f, wanderInterval));
         }
+    }
+    private bool CooldownOver()
+    {
+        return Time.time > cooldownWaitTime;
     }
     private void ResetAI()
     {
@@ -79,9 +83,7 @@ public class Collectable : MonoBehaviour
     }
     private void StartWander()
 {
-        if (!isPickedUp)
-        {
-            if (isWandering) return;
+            if (isWandering || isPickedUp) return;
 
             Vector3 randomDirection = Random.insideUnitSphere.normalized;
             Vector3 targetPosition = transform.position + randomDirection * wanderDistance;
@@ -94,7 +96,6 @@ public class Collectable : MonoBehaviour
 
                 Invoke("StopWander", Random.Range(0f, wanderInterval));
             }
-        }
     }
     private void StopWander()
     {
@@ -104,13 +105,13 @@ public class Collectable : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" && isPickedUp && !once)
+        if (collision.gameObject.tag == "Player" && isPickedUp && !hasRunOnce)
         {
-            once = true;
+            hasRunOnce = true;
             AddCreatureByTag();
 
-            GameObject explosion = Instantiate(particle, this.transform.position, Quaternion.identity);
-            Destroy(explosion, 2f);
+            GameObject collectionEffect = Instantiate(particlePrefab, this.transform.position, Quaternion.identity);
+            Destroy(collectionEffect, 2f);
             Destroy(gameObject);
         }
     }
