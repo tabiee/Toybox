@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class TestEnemy : MonoBehaviour
 {
     [Header("General")]
     public Transform enemy;
@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody enemyRB;
     private GameObject playerObject;
     private PlayerControl playerScript;
-    private PlayerStats playerStats;
+    private TestPlayerStats playerStats;
     private Quaternion defaultRotation;
 
     private bool playerNearby;
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         enemyRB = enemy.transform.GetComponent<Rigidbody>();
         playerObject = GameObject.FindGameObjectWithTag("Player");
         playerScript = playerObject.GetComponentInChildren<PlayerControl>();
-        playerStats = playerObject.GetComponentInChildren<PlayerStats>();
+        playerStats = playerObject.GetComponentInChildren<TestPlayerStats>();
 
         //random colors
         var enemyColor = enemy.GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);

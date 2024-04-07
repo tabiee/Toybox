@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Projectile : MonoBehaviour
+public class TestProjectile : MonoBehaviour
 {
     private Rigidbody proj;
     public GameObject explode;
@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy" && hitOnce == false)
         {
-            collision.gameObject.transform.Find("Trigger").GetComponent<Enemy>().HitBy(damageDealt);
+            collision.gameObject.transform.Find("Trigger").GetComponent<TestEnemy>().HitBy(damageDealt);
             Debug.Log("Enemy hit!");
             hitOnce = true;
         }
