@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872c7fea7e1240f42addef8a7d20045f, type: 3}
   m_Name: WepTest
   m_EditorClassIdentifier: 
-  projectileSpeed: 0
-  bulletsPerShot: 69
+  rateOfFire: 0.5
+  projectilesPerBurst: 1
   angleSpread: 0
-  rateOfFire: 0
+  burstCount: 1
+  timeBetweenBursts: 0
+  stagger: 0
+  oscillate: 0

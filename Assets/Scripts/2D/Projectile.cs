@@ -4,5 +4,28 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    //oncollission bullshit and damage dealing shit just copypaste the old one and make it better
+    public ProjectileData projectileData;
+    public Vector3 direction;
+    private void OnCollisionEnter(Collision collision)
+    {
+        //ashdajskdjaskdasdksa
+    }
+
+    private void Start()
+    {
+        float projectileLifetime = projectileData.projectileRange;
+        Invoke("DestroyThis", projectileLifetime);
+    }
+    private void Update()
+    {
+        MoveProjectile();
+    }
+    void MoveProjectile()
+    {
+        transform.Translate(direction.normalized * projectileData.projectileSpeed * Time.deltaTime);
+    }
+    void DestroyThis()
+    {
+        Destroy(this.gameObject);
+    }
 }

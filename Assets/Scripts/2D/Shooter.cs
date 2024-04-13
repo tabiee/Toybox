@@ -4,33 +4,100 @@ using UnityEngine;
 
 public abstract class Shooter : MonoBehaviour
 {
-    [SerializeField] private GameObject defaultBulletPrefab;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private ProjectileData projectileData;
 
-    //the shooter needs a prefab to modify. default bullet
-    //the shooter should have WPattern and BType (that can be changed)
-    //shooter uses that data to modify default data of the prefab
-    //shooter shoots the shooty mc shoot thing
+    public bool isShooting;
 
-    protected void Shoot(ProjectileData projData)
+    [SerializeField] private float startingDistance = 0.1f;
+    private Projectile projectile;
+    private Quaternion targetRotation;
+    protected void Start()
     {
-        Debug.Log($"{ this} says that bulletsPerShot is: {projData.weaponPattern.bulletsPerShot}");
+        projectile = projectilePrefab.GetComponent<Projectile>();
+        projectile.projectileData = projectileData;
+    }
+    protected void Shoot(Quaternion targetRot)
+    {
+        if (!isShooting)
+        {
+            StartCoroutine(ShootRoutine(targetRot));
+        }
+    }
+    private IEnumerator ShootRoutine(Quaternion targetRot)
+    {
+        isShooting = true;
+
+        float startAngle, currentAngle, angleStep, endAngle;
+        float timeBetweenProjectiles = 0f;
+        GameObject bullet;
+
+        GetProjectileAngle(out startAngle, out currentAngle, out angleStep, out endAngle);
+
+        if (projectileData.stagger) { 
+            timeBetweenProjectiles = projectileData.timeBetweenBursts / projectileData.projectilesPerBurst; 
+        }
+
+        for (int i = 0; i < projectileData.burstCount; i++)
+        {
+            if (projectileData.oscillate) {
+                currentAngle = endAngle;
+                endAngle = startAngle;
+                startAngle = currentAngle;
+                angleStep *= -1;
+            }
+
+            targetRotation = targetRot;
+
+            for (int j = 0; j < projectileData.projectilesPerBurst; j++)
+            {
+
+                Vector2 pos = FindProjectileSpawnLoc(currentAngle);
+                bullet = Instantiate(projectilePrefab, pos, Quaternion.identity);
+                bullet.transform.rotation = targetRotation;
+                projectile.direction = bullet.transform.position - transform.position;
+                currentAngle += angleStep;
+
+                if (projectileData.stagger) {
+                    yield return new WaitForSeconds(timeBetweenProjectiles);
+                }
+            }
+
+            currentAngle = startAngle;
+
+            if (!projectileData.stagger) {
+                yield return new WaitForSeconds(projectileData.timeBetweenBursts);
+            }
+        }
+        yield return new WaitForSeconds(projectileData.rateOfFire);
+        isShooting = false;
     }
 
-    //protected void FireBullet(Vector3 position, Vector3 direction, float speed)
-    //{
-    //    // Example implementation: Instantiate a bullet GameObject
-    //    GameObject bullet = InstantiateBullet(position);
-    //}
 
-    //// Helper method to instantiate a bullet GameObject
-    //private GameObject InstantiateBullet(Vector3 position)
-    //{
-    //    // Example: Instantiate a bullet prefab at the specified position
-    //    GameObject bulletPrefab = GetBulletPrefab(); // Implement this method in subclasses
-    //    GameObject bullet = Instantiate(bulletPrefab, position, Quaternion.identity);
-    //    return bullet;
-    //}
+    private void GetProjectileAngle(out float startAngle, out float currentAngle, out float angleStep, out float endAngle)
+    {
+        float targetAngle = Mathf.Atan2(projectile.direction.y, projectile.direction.x) * Mathf.Rad2Deg;
+        startAngle = targetAngle;
+        endAngle = targetAngle;
+        currentAngle = targetAngle;
+        float halfAngleSpread = 0f;
+        angleStep = 0f;
+        if (projectileData.angleSpread != 0)
+        {
+            angleStep = projectileData.angleSpread / (projectileData.projectilesPerBurst - 1);
+            halfAngleSpread = projectileData.angleSpread / 2f;
+            startAngle = targetAngle - halfAngleSpread;
+            endAngle = targetAngle + halfAngleSpread;
+            currentAngle = startAngle;
+        }
+    }
+    private Vector2 FindProjectileSpawnLoc(float currentAngle)
+    {
+        float x = transform.position.x + startingDistance * Mathf.Cos(currentAngle * Mathf.Deg2Rad);
+        float y = transform.position.y + startingDistance * Mathf.Sin(currentAngle * Mathf.Deg2Rad);
 
-    ////Abstract method to be implemented by subclasses to provide the bullet prefab
-    //protected abstract GameObject GetBulletPrefab();
+        Vector2 pos = new Vector2(x, y);
+
+        return pos;
+    }
 }

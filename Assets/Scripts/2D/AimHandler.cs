@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class AimHandler : MonoBehaviour
 {
     public static AimHandler instance;
-
     [SerializeField] private float rotationSpeed = 15f;
 
     private bool isHeld;
